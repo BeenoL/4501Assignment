@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">4501Assignment</string>
+    <string name="start">Start</string>
+    <string name="record">Record</string>
+    <string name="ranking">Ranking</string>
+    <string name="setting">Setting</string>
+    <string name="quit">Quit</string>
+</resources>
