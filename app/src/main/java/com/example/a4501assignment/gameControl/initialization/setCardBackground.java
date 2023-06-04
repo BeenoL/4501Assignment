@@ -1,4 +1,4 @@
-package gameControl.initialization;
+package com.example.a4501assignment.gameControl.initialization;
 
 import android.widget.Button;
 import android.widget.ImageView;

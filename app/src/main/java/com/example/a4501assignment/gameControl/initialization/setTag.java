@@ -1,4 +1,4 @@
-package gameControl.initialization;
+package com.example.a4501assignment.gameControl.initialization;
 
 import android.widget.ImageView;
 
@@ -15,7 +15,7 @@ public class setTag {
         Random random = new Random();
         for(int i  = 0; i < 4; i++){
             for(int j = 0; j < 2; j++){
-                buttonTag.add(i);
+                buttonTag.add(i+1);
             }
         }
         Collections.shuffle(buttonTag);

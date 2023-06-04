@@ -1,4 +1,4 @@
-package gameControl.cardControl;
+package com.example.a4501assignment.gameControl.cardControl;
 
 import android.widget.ImageView;
 
@@ -15,5 +15,6 @@ public class flipToTop {
             card.setBackgroundResource(R.drawable.two);
         }else if((int)card.getTag() == 4){
             card.setBackgroundResource(R.drawable.one);
-        }    }
+        }
+    }
 }

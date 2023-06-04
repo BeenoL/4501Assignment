@@ -1,4 +1,4 @@
-package screen;
+package com.example.a4501assignment.screen;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,22 +23,24 @@ public class MainActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-
+                Intent intent = new Intent(MainActivity.this, gameActivity.class);
+                startActivity(intent);
             }
         });
 
         rankingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, gameActivity.class);
+                startActivity(intent);
             }
         });
 
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, gameActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -1,4 +1,4 @@
-package gameControl.cardControl;
+package com.example.a4501assignment.gameControl.cardControl;
 
 import android.widget.ImageView;
 

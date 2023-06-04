@@ -1,4 +1,4 @@
-package gameControl;
+package com.example.a4501assignment.gameControl;
 
 public class checkFinish {
 
