@@ -10,8 +10,8 @@ public class record {
         this.time = time;
     }
 
-    public int getMoves(){
-        return moves;
+    public String getMoves(){
+        return String.valueOf(moves);
     }
 
     public String getTime(){

@@ -2,6 +2,8 @@ package com.example.a4501assignment.jsonControl;
 
 import android.util.Log;
 
+import com.example.a4501assignment.rankingControl.ranking;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,20 +11,23 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class MyThread {
 
     private String url;
-    String[] listIiem;
+    ArrayList<ranking> listIiem;
     String data = "";
 
     public volatile boolean parsingComplete = true;
 
-    public MyThread(String url){
+    public MyThread(String url, ArrayList<ranking> listIiem){
+        this.listIiem = null;
+        this.listIiem = listIiem;
         this.url = url;
     }
 
-    public String[] getListIiem(){
+    public ArrayList getListIiem(){
         return listIiem;
     }
 
@@ -30,10 +35,12 @@ public class MyThread {
         try{
             JSONObject jsonObject = new JSONObject(data);
             JSONArray jsonArray = new JSONArray(jsonObject.getJSONArray(""));
-            listIiem = new String[jsonArray.length()];
-            for(int i = 0; i < (listIiem.length)*2; i++){
-                listIiem[i] = jsonArray.getJSONObject(i).getString("Name");     //decode the JSON and put it into String array
-                listIiem[2*i] = String.valueOf(jsonArray.getJSONObject(i).getInt("Moves"));
+            listIiem = new ArrayList<>();
+            for(int i = 0; i < jsonArray.length(); i++){
+                String name = jsonArray.getJSONObject(i).getString("Name");     //decode the JSON and put it into Arraylist
+                int moves = jsonArray.getJSONObject(i).getInt("Moves");
+                ranking ranking = new ranking(name, moves);
+                listIiem.add(ranking);                                              //add item into arrayList
             }
             parsingComplete = false;    //parsing complete
         }catch(Exception e){

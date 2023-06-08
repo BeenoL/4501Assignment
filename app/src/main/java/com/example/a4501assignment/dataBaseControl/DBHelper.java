@@ -12,7 +12,7 @@ import java.util.Date;
 
 public class DBHelper {
 
-    static SQLiteDatabase database;
+    public static SQLiteDatabase database;
     static String sql;
     static Cursor cursor;
 
@@ -20,11 +20,11 @@ public class DBHelper {
         File outFile = context.getDatabasePath("Record");
         String outFileName = outFile.getPath();
         database = SQLiteDatabase.openDatabase(outFileName, null, SQLiteDatabase.CREATE_IF_NECESSARY);
-        sql = "DROP TABLE IF EXISTS Record";
-        database.execSQL(sql);
+        //sql = "DROP TABLE IF EXISTS Record";
+        //database.execSQL(sql);
         sql = "CREATE TABLE IF NOT EXISTS Record (ID INTEGER PRIMARY KEY AUTOINCREMENT, Step int, Time text, dayTime text);";
         database.execSQL(sql);
-        database.close();
+        //database.close();
     }
 
     public static Cursor readRecord(Context context){
@@ -33,9 +33,9 @@ public class DBHelper {
             String outFileName = outFile.getPath();
             database = SQLiteDatabase.openDatabase(outFileName, null, SQLiteDatabase.OPEN_READONLY);
             cursor = database.rawQuery("SELECT Step, Time, dayTime FROM Record ORDER BY ID DESC", null);
-            database.close();
+            //database.close();
         }catch (SQLException e){
-           Toast.makeText(context.getApplicationContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
+           Toast.makeText(context.getApplicationContext(), "Read Wrong", Toast.LENGTH_SHORT).show();
         }
         return cursor;
     }
@@ -48,10 +48,13 @@ public class DBHelper {
             File outFile = context.getDatabasePath("Record");
             String outFileName = outFile.getPath();
             database = SQLiteDatabase.openDatabase(outFileName, null, SQLiteDatabase.OPEN_READWRITE);
-            database.execSQL("INSERT INTO Record(Step, Time) VALUES " + "(" + moves + "," + time + "," + dayTime+ ");");
-            database.close();
+            database.execSQL("INSERT INTO Record (Step, Time, dayTime) VALUES (" + moves + ", " + time + ", " + dayTime+ ");");
+            //(1) near "12": syntax error in "INSERT INTO Record (Step, Time, dayTime) VALUES (8, 62, 08/06/2023 12:31);"
+            //database.execSQL("INSERT INTO Record (Step, Time, dayTime) VALUES (" + 1 + ", " + "time" + ", " + "dayTime" + ");");
+            //no such column: time in "INSERT INTO Record (Step, Time, dayTime) VALUES (1, time, dayTime);"
+            //database.close();
         }catch (SQLException e){
-            Toast.makeText(context.getApplicationContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context.getApplicationContext(), "Insert Wrong", Toast.LENGTH_SHORT).show();
         }
     }
 

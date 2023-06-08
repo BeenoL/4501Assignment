@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         quitButton.setOnClickListener(new View.OnClickListener() {
             @Override                                                                           //close the game
             public void onClick(View v) {
+                DBHelper.database.close();
                 finish();
             }
         });

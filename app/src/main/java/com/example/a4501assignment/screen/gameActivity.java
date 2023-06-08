@@ -39,6 +39,7 @@ public class gameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_main);
+        //calendar = new
         button1 = findViewById(R.id.button1);
         button2 = findViewById(R.id.button2);
         button3 = findViewById(R.id.button3);
@@ -149,13 +150,13 @@ public class gameActivity extends AppCompatActivity {
             card1.setAlpha(0.5f);
             card2.setAlpha(0.5f);                   //show the card in transparent if matched
             if(checkFinish.checkFinish(matched)){   //if the game is finished
-                time = (System.currentTimeMillis() - time)/100;     //count the time needed to finish the game
+                time = (System.currentTimeMillis() - time)/1000;     //count the time needed to finish the game
                 Toast.makeText(this, String.valueOf(time) + "s", Toast.LENGTH_SHORT).show();
                 //show dialog
                 if(true){                           //If user save the record
-                    DBHelper.writeRecord(getApplicationContext(), moves, String.valueOf(time), dateTimeConvert(calendar.getTime()));  //insert into database
+                    DBHelper.writeRecord(getApplicationContext(), moves, String.valueOf(time), dateTimeConvert());  //insert into database
                 }else{
-                    finish();                       //dont save and close the game
+                   // finish();                       //dont save and close the game
                 }
             }
         }else{
@@ -173,8 +174,8 @@ public class gameActivity extends AppCompatActivity {
         this.cardB = null;
     }
 
-    public String dateTimeConvert(Date date){
+    public String dateTimeConvert(){
         SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        return simpleDate.format(date);
+        return simpleDate.format(new Date());
     }
 }
