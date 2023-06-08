@@ -12,16 +12,19 @@
         android:theme="@style/Theme.4501Assignment"
         tools:targetApi="31">
         <activity
+            android:name=".rankingActivity"
+            android:exported="false" />
+        <activity
             android:name=".screen.gameActivity"
             android:exported="false" />
         <activity
             android:name=".screen.MainActivity"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

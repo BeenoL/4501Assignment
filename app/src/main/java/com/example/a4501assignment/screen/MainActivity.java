@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.a4501assignment.R;
+import com.example.a4501assignment.dataBaseControl.DBHelper;
 
 public class MainActivity extends AppCompatActivity {
     Button startButton, rankingButton, recordButton, quitButton;
@@ -19,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
         rankingButton = findViewById(R.id.rankingButton);
         recordButton = findViewById(R.id.recordButton);
         quitButton = findViewById(R.id.quitButton);
+
+        DBHelper.openDataBase(getApplicationContext());
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override

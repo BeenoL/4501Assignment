@@ -1,6 +1,7 @@
 package com.example.a4501assignment.screen;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import com.example.a4501assignment.R;
 import java.util.ArrayList;
 
+import com.example.a4501assignment.dataBaseControl.DBHelper;
 import com.example.a4501assignment.gameControl.cardControl.flipCard;
 import com.example.a4501assignment.gameControl.checkFinish;
 import com.example.a4501assignment.gameControl.initialization.setCardBackground;
@@ -24,6 +26,7 @@ public class gameActivity extends AppCompatActivity {
     ArrayList<ImageView> buttonList = new ArrayList<>();
     int step = 1;
     int matched = 0;
+    long time;
     ImageView cardA, cardB;
     Handler handler = new Handler();
 
@@ -118,6 +121,9 @@ public class gameActivity extends AppCompatActivity {
     }
 
     public void setCard(ImageView card){
+        if (step == 1) {
+            time = System.currentTimeMillis();
+        }
         if(this.cardA == null){                     //if no card is selected
             flipCard.flipToTop(card);               //flip card
             this.cardA = card;
@@ -136,7 +142,14 @@ public class gameActivity extends AppCompatActivity {
             card1.setAlpha(0.5f);
             card2.setAlpha(0.5f);                   //show the card in transparent if matched
             if(checkFinish.checkFinish(matched)){   //if the game is finished
-                                                    //show dialog
+                time = (System.currentTimeMillis() - time)/1000;     //count the time needed to finish the game
+                //show dialog
+                if(true){                           //If user save the record
+                    DBHelper.writeRecord(getApplicationContext(), step, String.valueOf(time));  //insert into database
+                }else{
+                    finish();                       //dont save and close the game
+                }
+
             }
         }else{
             handler.postDelayed(new Runnable() {
@@ -148,7 +161,7 @@ public class gameActivity extends AppCompatActivity {
                 }
             }, 500);
 
-            //tv_step.setText((int)step);                  //update the step text
+            tv_step.setText(step);                  //update the step text
         }
         this.cardA = null;                      //clear the saved value
         this.cardB = null;

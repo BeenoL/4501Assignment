@@ -28,10 +28,11 @@
         android:id="@+id/button3"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginStart="72dp"
         android:layout_marginBottom="16dp"
         android:text="Button3"
         app:layout_constraintBottom_toTopOf="@+id/button5"
-        tools:layout_editor_absoluteX="75dp" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/button4"
@@ -47,10 +48,11 @@
         android:id="@+id/button5"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginStart="72dp"
         android:layout_marginBottom="12dp"
         android:text="Button5"
         app:layout_constraintBottom_toTopOf="@+id/button7"
-        tools:layout_editor_absoluteX="72dp" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/button6"
@@ -96,9 +98,11 @@
         android:id="@+id/button_music"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="Mute"
-        tools:layout_editor_absoluteX="301dp"
-        tools:layout_editor_absoluteY="28dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_stepTitle"
