@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DBHelper {
 
@@ -18,35 +20,39 @@ public class DBHelper {
         File outFile = context.getDatabasePath("Record");
         String outFileName = outFile.getPath();
         database = SQLiteDatabase.openDatabase(outFileName, null, SQLiteDatabase.CREATE_IF_NECESSARY);
-        sql = "CREATE TABLE Record (ID int PRIMARY KEY AUTOINCREMENT, Step int, Time text);";
+        sql = "DROP TABLE IF EXISTS Record";
+        database.execSQL(sql);
+        sql = "CREATE TABLE IF NOT EXISTS Record (ID INTEGER PRIMARY KEY AUTOINCREMENT, Step int, Time text, dayTime text);";
         database.execSQL(sql);
         database.close();
     }
 
-    public static void readRecord(Context context){
+    public static Cursor readRecord(Context context){
         try {
             File outFile = context.getDatabasePath("Record");
             String outFileName = outFile.getPath();
             database = SQLiteDatabase.openDatabase(outFileName, null, SQLiteDatabase.OPEN_READONLY);
-            cursor = database.rawQuery("SELECT * FROM Record", null);
+            cursor = database.rawQuery("SELECT Step, Time, dayTime FROM Record ORDER BY ID DESC", null);
             database.close();
         }catch (SQLException e){
            Toast.makeText(context.getApplicationContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
         }
+        return cursor;
     }
 
               //  db.execSQL("INSERT INTO Seller(sID, sPassword, sName, sGender) values"
               //          + "(1005, 'pswd1005', 'Josephine', 'F'); ");
 
-    public static void writeRecord(Context context, int step, String time){
+    public static void writeRecord(Context context, int moves, String time, String dayTime){
         try {
             File outFile = context.getDatabasePath("Record");
             String outFileName = outFile.getPath();
             database = SQLiteDatabase.openDatabase(outFileName, null, SQLiteDatabase.OPEN_READWRITE);
-            database.execSQL("INSERT INTO Record(Step, Time) values + " + "(" + step + time + ");");
+            database.execSQL("INSERT INTO Record(Step, Time) VALUES " + "(" + moves + "," + time + "," + dayTime+ ");");
             database.close();
         }catch (SQLException e){
             Toast.makeText(context.getApplicationContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
         }
     }
+
 }

@@ -1,4 +1,4 @@
-package com.example.a4501assignment.jsonControl;
+package com.example.a4501assignment.recordControl;
 
 import android.view.View;
 import android.widget.TextView;

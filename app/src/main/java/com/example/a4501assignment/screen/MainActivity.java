@@ -12,6 +12,7 @@ import com.example.a4501assignment.dataBaseControl.DBHelper;
 
 public class MainActivity extends AppCompatActivity {
     Button startButton, rankingButton, recordButton, quitButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,13 +21,11 @@ public class MainActivity extends AppCompatActivity {
         rankingButton = findViewById(R.id.rankingButton);
         recordButton = findViewById(R.id.recordButton);
         quitButton = findViewById(R.id.quitButton);
-
-        DBHelper.openDataBase(getApplicationContext());
-
+        openDatabase();
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, gameActivity.class);
+                Intent intent = new Intent(MainActivity.this, gameActivity.class);  //start new game
                 startActivity(intent);
             }
         });
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         rankingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, gameActivity.class);
+                Intent intent = new Intent(MainActivity.this, rankingActivity.class);  //see online ranking
                 startActivity(intent);
             }
         });
@@ -42,16 +41,20 @@ public class MainActivity extends AppCompatActivity {
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, gameActivity.class);
+                Intent intent = new Intent(MainActivity.this, recordActivity.class);  //show play record
                 startActivity(intent);
             }
         });
 
         quitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
+            @Override                                                                           //close the game
             public void onClick(View v) {
                 finish();
             }
         });
+    }
+
+    private void openDatabase(){
+        DBHelper.openDataBase(getApplicationContext());
     }
 }

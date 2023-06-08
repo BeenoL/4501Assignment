@@ -1,7 +1,6 @@
 package com.example.a4501assignment.screen;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -10,7 +9,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.a4501assignment.R;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import com.example.a4501assignment.dataBaseControl.DBHelper;
 import com.example.a4501assignment.gameControl.cardControl.flipCard;
@@ -24,11 +27,13 @@ public class gameActivity extends AppCompatActivity {
     TextView tv_time, tv_step;
     ImageView button1, button2, button3, button4, button5, button6, button7, button8;
     ArrayList<ImageView> buttonList = new ArrayList<>();
-    int step = 1;
+    int moves = 1;
     int matched = 0;
     long time;
     ImageView cardA, cardB;
     Handler handler = new Handler();
+    SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM/yyyy");
+    Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +59,15 @@ public class gameActivity extends AppCompatActivity {
         buttonList.add(button8);
         setCardBackground.setCardBackground(buttonList);
         setTag.setTag(buttonList);
-        //for(int i = 0; i < buttonList.size(); i++){
+        //for(int i = 0; i < buttonList.size(); i++){         Not work :(
         //    buttonList.get(i).setOnClickListener(new View.OnClickListener() {
         //        @Override
         //        public void onClick(View v) {
-        //
+        //            setCard((ImageView) buttonList.get(j));
+        //            buttonList.get(j).setEnabled(false);
         //        }
         //    });
+        //    j++;
         //}
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +128,7 @@ public class gameActivity extends AppCompatActivity {
     }
 
     public void setCard(ImageView card){
-        if (step == 1) {
+        if (moves == 1) {
             time = System.currentTimeMillis();
         }
         if(this.cardA == null){                     //if no card is selected
@@ -135,21 +142,21 @@ public class gameActivity extends AppCompatActivity {
     }
 
     public void isMatchOrNot(ImageView card1, ImageView card2){
-        step++;                                     //moved one step
+        moves++;                                     //moved one step
         if(isMatch.isMatch(card1, card2)){
             matched++;
             Toast.makeText(getApplicationContext(), "Matched", Toast.LENGTH_SHORT).show();
             card1.setAlpha(0.5f);
             card2.setAlpha(0.5f);                   //show the card in transparent if matched
             if(checkFinish.checkFinish(matched)){   //if the game is finished
-                time = (System.currentTimeMillis() - time)/1000;     //count the time needed to finish the game
+                time = (System.currentTimeMillis() - time)/100;     //count the time needed to finish the game
+                Toast.makeText(this, String.valueOf(time) + "s", Toast.LENGTH_SHORT).show();
                 //show dialog
                 if(true){                           //If user save the record
-                    DBHelper.writeRecord(getApplicationContext(), step, String.valueOf(time));  //insert into database
+                    DBHelper.writeRecord(getApplicationContext(), moves, String.valueOf(time), dateTimeConvert(calendar.getTime()));  //insert into database
                 }else{
                     finish();                       //dont save and close the game
                 }
-
             }
         }else{
             handler.postDelayed(new Runnable() {
@@ -160,10 +167,14 @@ public class gameActivity extends AppCompatActivity {
                     card2.setEnabled(true);
                 }
             }, 500);
-
-            tv_step.setText(step);                  //update the step text
         }
+        tv_step.setText(String.valueOf(moves));                  //update the step text
         this.cardA = null;                      //clear the saved value
         this.cardB = null;
+    }
+
+    public String dateTimeConvert(Date date){
+        SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return simpleDate.format(date);
     }
 }

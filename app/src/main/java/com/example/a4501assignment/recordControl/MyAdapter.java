@@ -1,4 +1,4 @@
-package com.example.a4501assignment.jsonControl;
+package com.example.a4501assignment.recordControl;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a4501assignment.R;
+import com.example.a4501assignment.jsonControl.OnRecyclerViewClickListener;
+
 
 public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     Context context;
