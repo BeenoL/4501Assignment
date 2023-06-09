@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,9 +28,10 @@ public class recordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
         recordList = findViewById(R.id.recordList);
-        records = new ArrayList<record>();
+
+        records = new ArrayList<>();
         cursor = DBHelper.readRecord(getApplicationContext());
-        readRecord.readRecord(cursor, records);
+        records = readRecord.readRecord(cursor, records);
         myAdapter = new MyAdapter(getApplicationContext(), records);
         recordList.setAdapter(myAdapter);
     }

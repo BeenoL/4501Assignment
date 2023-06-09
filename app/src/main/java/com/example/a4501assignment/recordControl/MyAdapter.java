@@ -1,6 +1,7 @@
 package com.example.a4501assignment.recordControl;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ public class MyAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return mData.get(position);
+        return null;
     }
 
     @Override
@@ -43,10 +44,10 @@ public class MyAdapter extends BaseAdapter {
         convertView = LayoutInflater.from(context).inflate(R.layout.recordlayout, parent, false);
         TextView dayTime = (TextView) convertView.findViewById(R.id.dayTime);
         TextView time = (TextView) convertView.findViewById(R.id.recordTime);
-        TextView moves = (TextView) convertView.findViewById(R.id.moves);
-        dayTime.setText(mData.get(position).getDaytime());
-        time.setText(mData.get(position).getTime());
-        moves.setText(mData.get(position).getMoves());
+        TextView moves = (TextView) convertView.findViewById(R.id.recordMoves);
+        dayTime.setText("Played date: " + mData.get(position).getDaytime());
+        time.setText("Time used: " + mData.get(position).getTime() + "s");
+        moves.setText("Moves: " + mData.get(position).getMoves());
         return convertView;
     }
 }

@@ -22,7 +22,6 @@ public class MyThread {
     public volatile boolean parsingComplete = true;
 
     public MyThread(String url, ArrayList<ranking> listIiem){
-        this.listIiem = null;
         this.listIiem = listIiem;
         this.url = url;
     }

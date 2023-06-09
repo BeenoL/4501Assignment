@@ -29,12 +29,13 @@ public class rankingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
         url = getApplication().getResources().getString(R.string.url);  //set the url to provided json url
-        rankingList = findViewById(R.id.rankingList);      //initialize the listview
+        rankingList = findViewById(R.id.rankingList);           //initialize the listview
+
         myThread = new MyThread(url, dataArray);
         myThread.fetchJSON();
         while(myThread.parsingComplete);
-
         dataArray = myThread.getListIiem();
         adapter = new MyAdapter(getApplicationContext(), dataArray);
+        rankingList.setAdapter(adapter);
     }
 }

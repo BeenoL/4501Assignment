@@ -1,5 +1,6 @@
 package com.example.a4501assignment.dataBaseControl;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -24,7 +25,9 @@ public class DBHelper {
         //database.execSQL(sql);
         sql = "CREATE TABLE IF NOT EXISTS Record (ID INTEGER PRIMARY KEY AUTOINCREMENT, Step int, Time text, dayTime text);";
         database.execSQL(sql);
-        //database.close();
+        database.close();
+        //database = SQLiteDatabase.openDatabase(outFileName, null, SQLiteDatabase.OPEN_READWRITE);
+        //database.execSQL(sql);
     }
 
     public static Cursor readRecord(Context context){
@@ -48,11 +51,16 @@ public class DBHelper {
             File outFile = context.getDatabasePath("Record");
             String outFileName = outFile.getPath();
             database = SQLiteDatabase.openDatabase(outFileName, null, SQLiteDatabase.OPEN_READWRITE);
-            database.execSQL("INSERT INTO Record (Step, Time, dayTime) VALUES (" + moves + ", " + time + ", " + dayTime+ ");");
+            //database.execSQL("INSERT INTO Record (Step, Time, dayTime) VALUES (" + moves + ", " + time + ", " + dayTime+ ");");
             //(1) near "12": syntax error in "INSERT INTO Record (Step, Time, dayTime) VALUES (8, 62, 08/06/2023 12:31);"
             //database.execSQL("INSERT INTO Record (Step, Time, dayTime) VALUES (" + 1 + ", " + "time" + ", " + "dayTime" + ");");
             //no such column: time in "INSERT INTO Record (Step, Time, dayTime) VALUES (1, time, dayTime);"
             //database.close();
+            ContentValues insert = new ContentValues();
+            insert.put("Step", moves);
+            insert.put("Time", time);
+            insert.put("dayTime", dayTime);
+            int result = (int) database.insert("Record", null, insert);
         }catch (SQLException e){
             Toast.makeText(context.getApplicationContext(), "Insert Wrong", Toast.LENGTH_SHORT).show();
         }
