@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,11 +31,13 @@ public class rankingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ranking);
         url = getApplication().getResources().getString(R.string.url);  //set the url to provided json url
         rankingList = findViewById(R.id.rankingList);           //initialize the listview
-
+        dataArray = new ArrayList<>();
         myThread = new MyThread(url, dataArray);
         myThread.fetchJSON();
+        Log.d("http", "Read JSON");
         while(myThread.parsingComplete);
-        dataArray = myThread.getListIiem();
+        Log.d("http", "After Read");
+        myThread.getListIiem();
         adapter = new MyAdapter(getApplicationContext(), dataArray);
         rankingList.setAdapter(adapter);
     }
