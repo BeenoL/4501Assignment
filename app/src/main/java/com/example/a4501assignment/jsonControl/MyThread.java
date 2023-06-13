@@ -49,12 +49,8 @@ public class MyThread {
         }
     }
 
-    class Sortbyroll implements Comparator<ranking>
-    {
-        // Used for sorting in ascending order of
-        // roll number
-        public int compare(ranking a, ranking b)
-        {
+    class Sortbyroll implements Comparator<ranking> {
+        public int compare(ranking a, ranking b) {
             return a.getMoves() - b.getMoves();
         }
     }
