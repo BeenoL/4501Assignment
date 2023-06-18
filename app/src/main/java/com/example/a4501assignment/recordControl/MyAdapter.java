@@ -45,9 +45,9 @@ public class MyAdapter extends BaseAdapter {
         TextView dayTime = (TextView) convertView.findViewById(R.id.dayTime);
         TextView time = (TextView) convertView.findViewById(R.id.recordTime);
         TextView moves = (TextView) convertView.findViewById(R.id.recordMoves);
-        dayTime.setText("Played date: " + mData.get(position).getDaytime());
-        time.setText("Time used: " + mData.get(position).getTime() + "s");
-        moves.setText("Moves: " + mData.get(position).getMoves());
+        dayTime.setText("" + mData.get(position).getDaytime());
+        time.setText("" + mData.get(position).getTime() + "s");
+        moves.setText("" + mData.get(position).getMoves());
         return convertView;
     }
 }

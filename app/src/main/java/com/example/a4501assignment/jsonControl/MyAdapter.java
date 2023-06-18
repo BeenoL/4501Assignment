@@ -40,8 +40,8 @@ public class MyAdapter extends BaseAdapter {
         convertView = LayoutInflater.from(context).inflate(R.layout.rankinglayout, parent, false);
         TextView name = (TextView) convertView.findViewById(R.id.name);
         TextView moves = (TextView) convertView.findViewById(R.id.moves);
-        name.setText("Name : " + mData.get(position).getName());
-        moves.setText("Moves: " + mData.get(position).getMoves());
+        name.setText("" + mData.get(position).getName());
+        moves.setText("" + mData.get(position).getMoves());
         return convertView;
     }
 }

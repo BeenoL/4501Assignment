@@ -3,7 +3,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,7 +14,6 @@ import com.example.a4501assignment.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import com.example.a4501assignment.dataBaseControl.DBHelper;
@@ -21,25 +22,27 @@ import com.example.a4501assignment.gameControl.checkFinish;
 import com.example.a4501assignment.gameControl.initialization.setCardBackground;
 import com.example.a4501assignment.gameControl.initialization.setTag;
 import com.example.a4501assignment.gameControl.isMatch;
+import com.example.a4501assignment.soundControl.onPlayBackgroundSound;
+import com.example.a4501assignment.soundControl.playOnMatchSound;
 
 public class gameActivity extends AppCompatActivity {
 
     TextView tv_time, tv_step;
     ImageView button1, button2, button3, button4, button5, button6, button7, button8;
+    Button mute;
     ArrayList<ImageView> buttonList = new ArrayList<>();
     int moves = 1;
     int matched = 0;
     long time;
     ImageView cardA, cardB;
     Handler handler = new Handler();
-    SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM/yyyy");
-    Calendar calendar;
+    com.example.a4501assignment.soundControl.onPlayBackgroundSound playBackgroundSound;
+    com.example.a4501assignment.soundControl.playOnMatchSound playOnMatchSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_main);
-        //calendar = new
         button1 = findViewById(R.id.button1);
         button2 = findViewById(R.id.button2);
         button3 = findViewById(R.id.button3);
@@ -50,6 +53,7 @@ public class gameActivity extends AppCompatActivity {
         button8 = findViewById(R.id.button8);
         tv_time = findViewById(R.id.tv_time);
         tv_step = findViewById(R.id.tv_step);
+        mute = findViewById(R.id.button_music);
         buttonList.add(button1);
         buttonList.add(button2);
         buttonList.add(button3);
@@ -60,6 +64,11 @@ public class gameActivity extends AppCompatActivity {
         buttonList.add(button8);
         setCardBackground.setCardBackground(buttonList);
         setTag.setTag(buttonList);
+        playBackgroundSound = new onPlayBackgroundSound(getApplicationContext());
+        playOnMatchSound = new playOnMatchSound(getApplicationContext());
+        if(MainActivity.music == 1){
+            playBackgroundSound.playBackgroundMusic();
+        }
         //for(int i = 0; i < buttonList.size(); i++){         Not work :(
         //    buttonList.get(i).setOnClickListener(new View.OnClickListener() {
         //        @Override
@@ -126,6 +135,20 @@ public class gameActivity extends AppCompatActivity {
                 button8.setEnabled(false);          //user cannot click the same button again
             }
         });
+        mute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(MainActivity.music == 0){
+                    playBackgroundSound.playBackgroundMusic();
+                    Log.d("music", MainActivity.music+"");
+                    MainActivity.music = 1;
+                }else {
+                    playBackgroundSound.stopBackgroundMusic();
+                    Log.d("music", MainActivity.music+"");
+                    MainActivity.music = 0;
+                }
+            }
+        });
     }
 
     public void setCard(ImageView card){
@@ -149,6 +172,9 @@ public class gameActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Matched", Toast.LENGTH_SHORT).show();
             card1.setAlpha(0.5f);
             card2.setAlpha(0.5f);                   //show the card in transparent if matched
+            if(MainActivity.music == 1){
+                playOnMatchSound.playOnMatchSound();
+            }
             if(checkFinish.checkFinish(matched)){   //if the game is finished
                 time = (System.currentTimeMillis() - time)/1000;     //count the time needed to finish the game
                 Toast.makeText(this, String.valueOf(time) + "s", Toast.LENGTH_SHORT).show();
@@ -177,5 +203,10 @@ public class gameActivity extends AppCompatActivity {
     public String dateTimeConvert(){
         SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return simpleDate.format(new Date());
+    }
+
+    public void onStop() {
+        super.onStop();
+        playBackgroundSound.releaseBackgroundMusic();
     }
 }

@@ -4,14 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.a4501assignment.R;
 import com.example.a4501assignment.dataBaseControl.DBHelper;
+import com.example.a4501assignment.soundControl.onPlayScreenMusic;
 
 public class MainActivity extends AppCompatActivity {
-    Button startButton, rankingButton, recordButton, quitButton;
+    Button startButton, rankingButton, recordButton, quitButton, musicButton;
+    public static int music = 1;
+    com.example.a4501assignment.soundControl.onPlayScreenMusic onPlayScreenMusic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +25,14 @@ public class MainActivity extends AppCompatActivity {
         rankingButton = findViewById(R.id.rankingButton);
         recordButton = findViewById(R.id.recordButton);
         quitButton = findViewById(R.id.quitButton);
+        musicButton = findViewById(R.id.button_music);
+        onPlayScreenMusic = new onPlayScreenMusic(getApplicationContext());
+        onPlayScreenMusic.playScreenMusic();
         openDatabase();
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onPlayScreenMusic.stopScreenMusic();
                 Intent intent = new Intent(MainActivity.this, gameActivity.class);  //start new game
                 startActivity(intent);
             }
@@ -53,6 +61,31 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        musicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(MainActivity.music == 0){                                                    //start background music
+                    onPlayScreenMusic.playScreenMusic();
+                    MainActivity.music = 1;
+                }else {
+                    onPlayScreenMusic.stopScreenMusic();                                        //stop background music
+                    MainActivity.music = 0;
+                }
+            }
+        });
+    }
+
+    public void onResume() {
+        super.onResume();
+        if(MainActivity.music == 1){                                                    //start background music
+            onPlayScreenMusic.playScreenMusic();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void openDatabase(){
