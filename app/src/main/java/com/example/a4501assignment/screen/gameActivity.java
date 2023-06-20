@@ -29,7 +29,7 @@ public class gameActivity extends AppCompatActivity {
 
     TextView tv_time, tv_step;
     ImageView button1, button2, button3, button4, button5, button6, button7, button8;
-    Button mute;
+    ImageView mute;
     ArrayList<ImageView> buttonList = new ArrayList<>();
     int moves = 1;
     int matched = 0;
@@ -208,5 +208,6 @@ public class gameActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         playBackgroundSound.releaseBackgroundMusic();
+        playOnMatchSound.releaseMatchSound();
     }
 }

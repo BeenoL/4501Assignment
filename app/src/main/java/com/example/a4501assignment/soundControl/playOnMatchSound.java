@@ -20,4 +20,6 @@ public class playOnMatchSound {
     public void stopBackgroundMusic(){
         mediaPlayer.stop();
     }
+
+    public void releaseMatchSound(){mediaPlayer.release();}
 }

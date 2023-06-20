@@ -7,13 +7,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.example.a4501assignment.R;
 import com.example.a4501assignment.dataBaseControl.DBHelper;
 import com.example.a4501assignment.soundControl.onPlayScreenMusic;
 
 public class MainActivity extends AppCompatActivity {
-    Button startButton, rankingButton, recordButton, quitButton, musicButton;
+    ImageView startButton, rankingButton, recordButton, quitButton, musicButton;
     public static int music = 1;
     com.example.a4501assignment.soundControl.onPlayScreenMusic onPlayScreenMusic;
 
