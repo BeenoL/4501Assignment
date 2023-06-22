@@ -33,11 +33,11 @@ public class rankingActivity extends AppCompatActivity {
         rankingList = findViewById(R.id.rankingList);           //initialize the listview
         dataArray = new ArrayList<>();
         myThread = new MyThread(url, dataArray);
-        myThread.fetchJSON();
+        myThread.fetchJSON();                                   //get data from api
         Log.d("http", "Read JSON");
         while(myThread.parsingComplete);
         Log.d("http", "After Read");
-        myThread.getListIiem();
+        myThread.getListIiem();                                 //insert data from json to listview
         adapter = new MyAdapter(getApplicationContext(), dataArray);
         rankingList.setAdapter(adapter);
     }

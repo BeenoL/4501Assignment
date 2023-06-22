@@ -3,6 +3,7 @@ package com.example.a4501assignment.screen;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +18,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView startButton, rankingButton, recordButton, quitButton, musicButton;
     public static int music = 1;
     com.example.a4501assignment.soundControl.onPlayScreenMusic onPlayScreenMusic;
-
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +29,15 @@ public class MainActivity extends AppCompatActivity {
         recordButton = findViewById(R.id.recordButton);
         quitButton = findViewById(R.id.quitButton);
         musicButton = findViewById(R.id.button_music);
+        preferences = this.getSharedPreferences("music", MODE_PRIVATE);  //get user music preferences
+        music = preferences.getInt("music", 1);
         onPlayScreenMusic = new onPlayScreenMusic(getApplicationContext());
-        onPlayScreenMusic.playScreenMusic();
+        if (music == 1){
+            musicButton.setBackgroundResource(R.drawable.music);        //if user set to play the sound
+            onPlayScreenMusic.playScreenMusic();                        //set the music icon and play the music
+        }else{
+            musicButton.setBackgroundResource(R.drawable.mute);         //else set the mute icon
+        }
         openDatabase();
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,9 +65,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         quitButton.setOnClickListener(new View.OnClickListener() {
-            @Override                                                                           //close the game
+            @Override                                                                           //close game
             public void onClick(View v) {
-                DBHelper.database.close();
+                DBHelper.database.close();                                                      //close database
+                onPlayScreenMusic.releaseBackgroundMusic();                                     //close music
                 finish();
             }
         });
@@ -67,11 +77,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(MainActivity.music == 0){                                                    //start background music
-                    onPlayScreenMusic.playScreenMusic();
+                    onPlayScreenMusic.playScreenMusic();                                        // set  the music icon to music icon
+                    musicButton.setBackgroundResource(R.drawable.music);
                     MainActivity.music = 1;
                 }else {
                     onPlayScreenMusic.stopScreenMusic();                                        //stop background music
                     MainActivity.music = 0;
+                    musicButton.setBackgroundResource(R.drawable.mute);                         //set the music icon to mute icon
                 }
             }
         });
@@ -86,10 +98,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        editor = preferences.edit();                                                    //save user preferences
+        editor.putInt("music", music);
+        editor.commit();
         super.onDestroy();
+
     }
 
     private void openDatabase(){
-        DBHelper.openDataBase(getApplicationContext());
+        DBHelper.openDataBase(getApplicationContext());                                 //method for open database
     }
 }

@@ -28,11 +28,10 @@ public class recordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
         recordList = findViewById(R.id.recordList);
-
-        records = new ArrayList<>();
-        cursor = DBHelper.readRecord(getApplicationContext());
-        records = readRecord.readRecord(cursor, records);
-        myAdapter = new MyAdapter(getApplicationContext(), records);
+        records = new ArrayList<>();                //list for saving the item got from database
+        cursor = DBHelper.readRecord(getApplicationContext());  //open database for getting data
+        records = readRecord.readRecord(cursor, records);       //write data to record list
+        myAdapter = new MyAdapter(getApplicationContext(), records);    //insert data from database to listview
         recordList.setAdapter(myAdapter);
     }
 }

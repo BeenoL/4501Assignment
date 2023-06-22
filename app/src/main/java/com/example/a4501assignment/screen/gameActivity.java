@@ -15,6 +15,8 @@ import com.example.a4501assignment.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.example.a4501assignment.dataBaseControl.DBHelper;
 import com.example.a4501assignment.gameControl.cardControl.flipCard;
@@ -31,11 +33,13 @@ public class gameActivity extends AppCompatActivity {
     ImageView button1, button2, button3, button4, button5, button6, button7, button8;
     ImageView mute;
     ArrayList<ImageView> buttonList = new ArrayList<>();
-    int moves = 1;
+    int moves = 0;
     int matched = 0;
     long time;
     ImageView cardA, cardB;
     Handler handler = new Handler();
+    Timer timer;
+    TimerTask task;
     com.example.a4501assignment.soundControl.onPlayBackgroundSound playBackgroundSound;
     com.example.a4501assignment.soundControl.playOnMatchSound playOnMatchSound;
 
@@ -66,9 +70,26 @@ public class gameActivity extends AppCompatActivity {
         setTag.setTag(buttonList);
         playBackgroundSound = new onPlayBackgroundSound(getApplicationContext());
         playOnMatchSound = new playOnMatchSound(getApplicationContext());
-        if(MainActivity.music == 1){
+        if (MainActivity.music == 1){
+            mute.setBackgroundResource(R.drawable.music);
             playBackgroundSound.playBackgroundMusic();
+        }else{
+            mute.setBackgroundResource(R.drawable.mute);
         }
+        timer = new Timer();
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        time++;                                 //timer for user to see
+                        tv_time.setText(getTimerText() + "s");  //update the timer
+                    }
+                });
+            }
+        };
+        timer.scheduleAtFixedRate(task, 0 ,1000);   //count every second
         //for(int i = 0; i < buttonList.size(); i++){         Not work :(
         //    buttonList.get(i).setOnClickListener(new View.OnClickListener() {
         //        @Override
@@ -139,12 +160,12 @@ public class gameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(MainActivity.music == 0){
-                    playBackgroundSound.playBackgroundMusic();
-                    Log.d("music", MainActivity.music+"");
+                    playBackgroundSound.playBackgroundMusic();      //play the music and set the icon
+                    mute.setBackgroundResource(R.drawable.music);
                     MainActivity.music = 1;
                 }else {
-                    playBackgroundSound.stopBackgroundMusic();
-                    Log.d("music", MainActivity.music+"");
+                    playBackgroundSound.stopBackgroundMusic();      //stop the music and set the icon
+                    mute.setBackgroundResource(R.drawable.mute);
                     MainActivity.music = 0;
                 }
             }
@@ -169,7 +190,6 @@ public class gameActivity extends AppCompatActivity {
         moves++;                                     //moved one step
         if(isMatch.isMatch(card1, card2)){
             matched++;
-            Toast.makeText(getApplicationContext(), "Matched", Toast.LENGTH_SHORT).show();
             card1.setAlpha(0.5f);
             card2.setAlpha(0.5f);                   //show the card in transparent if matched
             if(MainActivity.music == 1){
@@ -177,7 +197,7 @@ public class gameActivity extends AppCompatActivity {
             }
             if(checkFinish.checkFinish(matched)){   //if the game is finished
                 time = (System.currentTimeMillis() - time)/1000;     //count the time needed to finish the game
-                Toast.makeText(this, String.valueOf(time) + "s", Toast.LENGTH_SHORT).show();
+                timer.cancel();
                 //show dialog
                 if(true){                           //If user save the record
                     DBHelper.writeRecord(getApplicationContext(), moves, String.valueOf(time), dateTimeConvert());  //insert into database
@@ -195,19 +215,26 @@ public class gameActivity extends AppCompatActivity {
                 }
             }, 500);
         }
-        tv_step.setText(String.valueOf(moves));                  //update the step text
-        this.cardA = null;                      //clear the saved value
+        tv_step.setText(String.valueOf(moves));             //update the step text
+        this.cardA = null;                                  //clear the saved value
         this.cardB = null;
     }
 
     public String dateTimeConvert(){
         SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        return simpleDate.format(new Date());
+        return simpleDate.format(new Date());               //convert time to date and time for saving into database
     }
 
     public void onStop() {
         super.onStop();
-        playBackgroundSound.releaseBackgroundMusic();
+        playBackgroundSound.releaseBackgroundMusic();       //release the music player
         playOnMatchSound.releaseMatchSound();
+    }
+
+    private String getTimerText()                           //convert time to second
+    {
+        int rounded = (int) Math.round(time);
+        int seconds = ((rounded % 86400) % 3600) % 60;
+        return String.valueOf(seconds);
     }
 }
