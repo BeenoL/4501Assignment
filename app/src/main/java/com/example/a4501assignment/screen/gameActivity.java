@@ -1,10 +1,13 @@
 package com.example.a4501assignment.screen;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +36,7 @@ public class gameActivity extends AppCompatActivity {
     ImageView button1, button2, button3, button4, button5, button6, button7, button8;
     ImageView mute;
     ArrayList<ImageView> buttonList = new ArrayList<>();
+    Dialog dialog;
     int moves = 0;
     int matched = 0;
     long time;
@@ -76,30 +80,6 @@ public class gameActivity extends AppCompatActivity {
         }else{
             mute.setBackgroundResource(R.drawable.mute);
         }
-        timer = new Timer();
-        task = new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        time++;                                 //timer for user to see
-                        tv_time.setText(getTimerText() + "s");  //update the timer
-                    }
-                });
-            }
-        };
-        timer.scheduleAtFixedRate(task, 0 ,1000);   //count every second
-        //for(int i = 0; i < buttonList.size(); i++){         Not work :(
-        //    buttonList.get(i).setOnClickListener(new View.OnClickListener() {
-        //        @Override
-        //        public void onClick(View v) {
-        //            setCard((ImageView) buttonList.get(j));
-        //            buttonList.get(j).setEnabled(false);
-        //        }
-        //    });
-        //    j++;
-        //}
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,6 +150,20 @@ public class gameActivity extends AppCompatActivity {
                 }
             }
         });
+        timer = new Timer();
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        time++;                                 //timer for user to see
+                        tv_time.setText(getTimerText() + "s");  //update the timer
+                    }
+                });
+            }
+        };
+        timer.scheduleAtFixedRate(task, 0 ,1000);   //count every second
     }
 
     public void setCard(ImageView card){
@@ -198,12 +192,28 @@ public class gameActivity extends AppCompatActivity {
             if(checkFinish.checkFinish(matched)){   //if the game is finished
                 time = (System.currentTimeMillis() - time)/1000;     //count the time needed to finish the game
                 timer.cancel();
-                //show dialog
-                if(true){                           //If user save the record
-                    DBHelper.writeRecord(getApplicationContext(), moves, String.valueOf(time), dateTimeConvert());  //insert into database
-                }else{
-                   // finish();                       //dont save and close the game
-                }
+                dialog = new Dialog(this);
+                dialog.setContentView(R.layout.dialoglayout);                                   //initialize dialog box
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.setCancelable(false);
+                dialog.show();
+                dialog.getWindow().getAttributes().windowAnimations = R.style.animation;        //show dialog
+                ImageView reset = dialog.findViewById(R.id.reset);                              //set the button function
+                ImageView save = dialog.findViewById(R.id.save);
+                reset.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();                       //don't save and restart the game
+                        startActivity(getIntent());
+                    }
+                });
+                save.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DBHelper.writeRecord(getApplicationContext(), moves, String.valueOf(time), dateTimeConvert());  //save record into database
+                        finish();                                               //exit the game
+                    }
+                });
             }
         }else{
             handler.postDelayed(new Runnable() {
