@@ -1,6 +1,6 @@
 package com.example.a4501assignment.rankingControl;
 
-public class ranking {
+public class ranking {          //ranking item for converting record from api to list item
     private String name;
     private int moves;
 

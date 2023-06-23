@@ -241,8 +241,7 @@ public class gameActivity extends AppCompatActivity {
         playOnMatchSound.releaseMatchSound();
     }
 
-    private String getTimerText()                           //convert time to second
-    {
+    private String getTimerText(){                        //convert time to second
         int rounded = (int) Math.round(time);
         int seconds = ((rounded % 86400) % 3600) % 60;
         return String.valueOf(seconds);

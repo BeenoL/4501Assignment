@@ -1,6 +1,6 @@
 package com.example.a4501assignment.recordControl;
 
-public class record {
+public class record {           //record item for converting record from database to list item
     private int moves;
     private String time, daytime;
 

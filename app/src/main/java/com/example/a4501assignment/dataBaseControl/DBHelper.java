@@ -17,45 +17,32 @@ public class DBHelper {
     static String sql;
     static Cursor cursor;
 
-    public static void openDataBase(Context context){
+    public static void openDataBase(Context context){               //create and open database when
         File outFile = context.getDatabasePath("Record");
         String outFileName = outFile.getPath();
         database = SQLiteDatabase.openDatabase(outFileName, null, SQLiteDatabase.CREATE_IF_NECESSARY);
-        //sql = "DROP TABLE IF EXISTS Record";
-        //database.execSQL(sql);
         sql = "CREATE TABLE IF NOT EXISTS Record (ID INTEGER PRIMARY KEY AUTOINCREMENT, Step int, Time text, dayTime text);";
         database.execSQL(sql);
         database.close();
-        //database = SQLiteDatabase.openDatabase(outFileName, null, SQLiteDatabase.OPEN_READWRITE);
-        //database.execSQL(sql);
     }
 
-    public static Cursor readRecord(Context context){
+    public static Cursor readRecord(Context context){               //get user play record
         try {
             File outFile = context.getDatabasePath("Record");
             String outFileName = outFile.getPath();
             database = SQLiteDatabase.openDatabase(outFileName, null, SQLiteDatabase.OPEN_READONLY);
             cursor = database.rawQuery("SELECT Step, Time, dayTime FROM Record ORDER BY ID DESC", null);
-            //database.close();
         }catch (SQLException e){
            Toast.makeText(context.getApplicationContext(), "Read Wrong", Toast.LENGTH_SHORT).show();
         }
         return cursor;
     }
 
-              //  db.execSQL("INSERT INTO Seller(sID, sPassword, sName, sGender) values"
-              //          + "(1005, 'pswd1005', 'Josephine', 'F'); ");
-
-    public static void writeRecord(Context context, int moves, String time, String dayTime){
+    public static void writeRecord(Context context, int moves, String time, String dayTime){    //write record to database
         try {
             File outFile = context.getDatabasePath("Record");
             String outFileName = outFile.getPath();
             database = SQLiteDatabase.openDatabase(outFileName, null, SQLiteDatabase.OPEN_READWRITE);
-            //database.execSQL("INSERT INTO Record (Step, Time, dayTime) VALUES (" + moves + ", " + time + ", " + dayTime+ ");");
-            //(1) near "12": syntax error in "INSERT INTO Record (Step, Time, dayTime) VALUES (8, 62, 08/06/2023 12:31);"
-            //database.execSQL("INSERT INTO Record (Step, Time, dayTime) VALUES (" + 1 + ", " + "time" + ", " + "dayTime" + ");");
-            //no such column: time in "INSERT INTO Record (Step, Time, dayTime) VALUES (1, time, dayTime);"
-            //database.close();
             ContentValues insert = new ContentValues();
             insert.put("Step", moves);
             insert.put("Time", time);
